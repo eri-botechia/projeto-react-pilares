@@ -24,10 +24,6 @@ export const GlobalStyled = createGlobalStyle`
     --rounded: 15px; 
     --roundedLight: 10px; 
     --roundedMedium: 20px;
-    --black: #f5f5f5;
-    --gray-200: #94a3b8;
-    --gray-500: #f5f5f5;
-    --gray-900: #64748b;
 
 
 
@@ -44,14 +40,4 @@ export const GlobalStyled = createGlobalStyle`
     font-family: 'Space Grotesk', sans-serif;
   }
   
-
-  form{
-    width: 100%s;
-    margin:  30px auto;
-    padding: 0.5rem;
-
-  }
-
-
-
   `
