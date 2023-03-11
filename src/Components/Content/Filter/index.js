@@ -3,7 +3,7 @@ import {SearchCtn, SearchList, SearchItem, SearchImg , SearchH2, AddCart, SeeDet
 
 
 
-export function Filter({product}){
+export function Filter({products, setProducts}){
 
 
  return(
