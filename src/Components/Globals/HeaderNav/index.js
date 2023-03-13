@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useState } from 'react';
 import {  Hero, NavList  , NavButton} from './styled'
 
@@ -19,10 +19,14 @@ const [titlePage, setTitlePage] = useState("Bem Vindo")
     
     const showPage2 = (pages) =>{
         setPages(2) 
-        setTitlePage("Credito e Ofertas")
+        setTitlePage("Ofertas")
         
     }
-
+    const showPage3= (pages) =>{
+        setPages(3) 
+        setTitlePage("Projeto")
+        
+    }
 return(
   <div>
 <NavList>
@@ -30,8 +34,10 @@ return(
         <NavButton onClick={showPage1}>
           Produtos
           </NavButton>
-        <NavButton onClick={showPage2}>ClubCliente</NavButton>
+        <NavButton onClick={showPage2}>Ofertas</NavButton>
+
         <NavButton onClick={showModal}>Carrinho</NavButton>
+        <NavButton onClick={showPage3}>Projeto</NavButton>
     </NavList>
     
      <Hero>

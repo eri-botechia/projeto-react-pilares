@@ -1,40 +1,32 @@
-import React from 'react';
-
-import { GlobalStyled } from './globalStyled';
-import { OrderCategories } from './Components/Order/OrderCategories';
-import  {DivOffers, DivTotal, DivModal, CtnType, Div50, DivRow, ButtonCard1, Small, InputNumber, Page, FormFilter, MainCtn, SectionCtn, SectionTitle, AsideRight, Label, ArticleBox, FormContainer, InputText, HeaderCtn2} from './styled'
-import { HeaderNav } from './Partials/HeaderNav/index';
-import { Footer } from './Partials/Footer/index';
+import { GlobalStyled } from './Components/Globals/globalStyled';
+import { OrderCategories } from './Components/Content/Filter/OrderCategories';
+import {Project} from './Views/Project/index'
+import  {DivOffers, DivTotal, DivModal, CtnType, Div50, DivRow, ButtonCard1, Small, InputNumber, Page, FormFilter, MainCtn, SectionCtn, SectionTitle, AsideRight, Label, ArticleBox, FormContainer, InputText} from './Components/Globals/Containers/styled'
+import { HeaderNav } from './Components/Globals/HeaderNav/index';
+import { Footer } from './Components/Globals/Footer/index';
 import dataProducts from './Data/dataProducts'
 import { useState } from 'react';
-import { CardProduct } from './Components/ProductsList/CardProduct/index';
-import './App.js'
-
+import { CardProduct } from './Components/Content/ProductsList/CardProduct/index';
+import { OrderPriceCategory } from './Components/Content/Filter/OrderPriceCategory/index';
+import { ButtonAllReset } from './Components/Content/Filter/OrderPriceCategory/index';
 function App() {
   const [modalDisplay, setModalDisplay] = useState(0);
-  console.log(modalDisplay)
+
+
+  const [productsPrice, setProductsPrice] = useState([...dataProducts]);
+
   const [products , setProducts] = useState([...dataProducts]) 
 const [pages , setPages] = useState(1)
   const [minValue, setMinValue] = useState(1)
-  const [avalia, setAvalia]  = useState("BEM VINDO SIMULADOR DE CREDITO")
+
   const [maxValue, setMaxValue] = useState(200)
-  const [salarioDeclarado, setSalarioDeclarado] = useState(1000)
+  
  const [carrito, setCarrito] = useState([]);
  const [cartList , setCartList] = useState([]) 
  const [total, setTotal] = useState(0);
- 
- const productTotal = (a, b)=>{
 
+ const calcItem = (a, b)=>{
 return a * b
-
-}
-
-const autorizaCredito = (e)=>{
-  e.preventDefault()
-  if(e.target.value < 1000){
-    setAvalia(`SOLICITÇÃO INDISPONIVEL, MAS TE DAMOS 10% PARA VOLTAR!`)
-  }
-  setAvalia(`BEM VINDO AO CREDITO E CARTEIRA INTELIGENTE DA LOJA SUA AMIGA! CONHECA AS OPCOES`)
 }
 
 
@@ -100,7 +92,7 @@ const autorizaCredito = (e)=>{
     setModalDisplay(0)
   }
 const handleFiltrados = (maxPrice, minValue, nameProducts) =>{
- filterName(nameProducts);
+    filterName(nameProducts);
   filterPriceMin(minValue);
   filterPriceMax(maxPrice);  
   return products
@@ -134,8 +126,8 @@ const filterType = (value)=>{
      
 
  <DivTotal> 
-  <button onClick={closeModal}>X Fechar</button>  
-  <SectionTitle>Valor Total
+ <button onClick={closeModal}>X Fechar</button>  
+ <SectionTitle>Valor Total
 <span>R$ {[...carrito].reduce((productTotal , cartProduct)=>
     Number(productTotal += (cartProduct.price * cartProduct.quantity)), 0)  
   }</span></SectionTitle>
@@ -143,53 +135,41 @@ const filterType = (value)=>{
                   </Div50>
 
  <Div50>
-<table>
-  <thead>
-    <tr>
-    <th >Item </th>	
-                    <th colSpan="4"> Qtd </th>	 
-                    <th>Total </th>
-    </tr>
-  </thead>
-  <tbody>
+
+  <ul>
 
     {
             carrito.length >= 1 ? (
               
-                carrito.map((cartProduct) => ( <
-                    tr key = { cartProduct.id } >
-                    <td> { cartProduct.name } </td>	
-                    <td colSpan="4"> 
+                carrito.map((cartProduct) => ( 
+                  <li key={ cartProduct.id } >
+            <div>
+                    <h2> { cartProduct.name } </h2>	
+             
                     <button onClick = {
                       () => lessProduct(cartProduct)
                   } > <i class="fa-solid fa-circle-minus"></i> </button>
-                    { cartProduct.quantity }
+                   <span> { cartProduct.quantity }</span>
                     <button onClick = {
                       () => addCart(cartProduct)
                   } > <i class="fa-solid fa-circle-plus"></i></button >
-                    </td>	 
-                    <td>R$ {productTotal( cartProduct.quantity,  cartProduct.price)}</td>
-                   
-                  </tr>
+            
+      
+                <p>R$ {cartProduct.quantity,  cartProduct.price}</p>
+       </div>
+                  </li>
+  
                 )
                 )
            ) : ( 
-              <tr>
-              <td colSpan="6">
+           <li>
                Carrinho Vazio... 
-            </td>
-               </tr>
-
+            </li>
+          
                )
         }
-        </tbody>
-                  <tfoot>
-                    <tr>
-                   
-
-                    </tr>
-                  </tfoot>
-                  </table>	</Div50>
+        </ul>
+	</Div50>
                   
                   
  
@@ -236,27 +216,38 @@ filterType={filterType}
 <br/></CtnType>
   </FormFilter>
     <hr/>
-    <Small>TOTAL DE PRODUTOS :{products.length} </Small>
+
 
 
 </FormContainer>
         </AsideRight> 
           <SectionCtn> 
 
-<SectionTitle>
-
-
-    <span>PRODUTOS</span>
-
+<SectionTitle> PRODUTOS ENCONTRADOS {products.length}
 
  
+  <ButtonAllReset
+ products={products} 
+ setProducts={setProducts} 
+ dataProducts={dataProducts}
+ /> 
+ 
+ <OrderPriceCategory
+ products={products} 
+ setProducts={setProducts} 
+ dataProducts={dataProducts}
+ />
+
+</SectionTitle>
+
+
       <br/>  
       
 	
 
-</SectionTitle>
- 
-{products.map(product=>
+
+
+{[...products].map(product=>
         <ArticleBox key={product.id}>
            
 
@@ -275,32 +266,30 @@ filterType={filterType}
 
           </SectionCtn>
           </MainCtn>):
+          (pages === 2? 
           (
             <MainCtn>
-              <form>
-      
-                    <h2>SIMULADOR DE CREDITO</h2>
-                    <p>Simule o credito GARANTIDO economizando
-                      ate 50% em suas compras nos proximos 6 meses!
-                    </p>
-        </form>
-
+     
+            <h2>Oferta</h2>
 
           <DivRow>
                    <button> <i class="fas fa-arrow-left"></i> </button>
                
                     <DivOffers>
                 
-               <form>
-<input type="text"/><input type="text"/>
-
-               </form>
+                  <p>PREÇO</p>
+                  <p>DISCONTO: 10%;</p>
+              
                   </DivOffers>
-                  <input type="date"/>
+                  
                   <button> <i class="fas fa-arrow-right"></i> </button>
              </DivRow>
              </MainCtn>
-               )     
+               ):
+               (
+                <Project/>
+               ) 
+          )    
 }<Footer/>
   </Page>
 
